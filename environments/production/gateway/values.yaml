@@ -1,0 +1,35 @@
+replicaCount: 1
+image:
+  repository: "743320495203.dkr.ecr.us-east-1.amazonaws.com/microservices-1"
+  tag: "gateway"
+  pullPolicy: Always
+imagePullSecrets:
+  - name: ecr-secret
+service:
+  type: ClusterIP
+  port: 5000
+container:
+  port: 5000
+config:
+  enabled: true
+  data:
+    APP_ENV: production
+    SERVICE_NAME: gateway
+    AUTH_URL: "http://auth:5001"
+    PRODUCT_URL: "http://product:5002"
+    ORDER_URL: "http://order:5003"
+    CART_URL: "http://cart:5004"
+
+ingress:
+  enabled: true
+  className: nginx
+  host: "microservices.local"
+  paths:
+    - path: /products
+      pathType: Prefix
+    - path: /login
+      pathType: Prefix
+    - path: /cart
+      pathType: Prefix
+    - path: /orders
+      pathType: Prefix

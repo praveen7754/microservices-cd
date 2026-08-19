@@ -1,0 +1,33 @@
+replicaCount: 1
+image:
+  repository: "743320495203.dkr.ecr.us-east-1.amazonaws.com/microservices-1"
+  tag: "product"
+  pullPolicy: Always
+imagePullSecrets:
+  - name: ecr-secret
+service:
+  type: ClusterIP
+  port: 5002
+container:
+  port: 5002
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 5Gi
+  storageClassName: "standard"
+  mountPath: /data
+
+redis:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 6379
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClassName: "standard"
+config:
+  enabled: true
+  data:
+    APP_ENV: production
+    SERVICE_NAME: product

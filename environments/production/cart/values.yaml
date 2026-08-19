@@ -1,0 +1,27 @@
+replicaCount: 1
+image:
+  repository: "743320495203.dkr.ecr.us-east-1.amazonaws.com/microservices-1"
+  tag: "cart"
+  pullPolicy: Always
+imagePullSecrets:
+  - name: ecr-secret
+service:
+  type: ClusterIP
+  port: 5004
+container:
+  port: 5004
+config:
+  enabled: true
+  data:
+    APP_ENV: production
+    SERVICE_NAME: cart
+
+redis:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 6379
+  persistence:
+    enabled: true
+    size: 2Gi
+    storageClassName: "standard"

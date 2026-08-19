@@ -1,0 +1,31 @@
+replicaCount: 1
+image:
+  repository: "743320495203.dkr.ecr.us-east-1.amazonaws.com/microservices-1"
+  tag: "frontend"
+  pullPolicy: Always
+imagePullSecrets:
+  - name: ecr-secret
+service:
+  type: ClusterIP
+  port: 80
+container:
+  port: 80
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+config:
+  enabled: true
+  data:
+    APP_ENV: production
+    SERVICE_NAME: frontend
+ingress:
+  enabled: true
+  className: nginx
+  host: "microservices.local"
+  paths:
+    - path: /
+      pathType: Prefix

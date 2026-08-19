@@ -1,0 +1,53 @@
+replicaCount: 1
+image:
+  repository: "123456789012.dkr.ecr.us-east-1.amazonaws.com/microservices-1"
+  tag: "product"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 80
+container:
+  port: 5002
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 2Gi
+  mountPath: /data
+
+streaming:
+  enabled: true
+  mode: kafka
+  kafka:
+    enabled: true
+    image:
+      repository: apache/kafka
+      tag: "3.7.2"
+      pullPolicy: IfNotPresent
+    clusterId: "4L6g3nShT-eMCtK--X86sw"
+    brokers:
+      - dev-kafka:9092
+    topic: product-ingestion-dev
+    consumerGroup: product-ingestion-dev-group
+    securityProtocol: PLAINTEXT
+    saslMechanism: ""
+    saslUsername: ""
+    saslPassword: ""
+    persistence:
+      enabled: false
+      size: 5Gi
+
+redis:
+  enabled: true
+  service:
+    port: 6379
+  persistence:
+    enabled: false
+    size: 2Gi
+    storageClassName: "standard"
+
+config:
+  enabled: true
+  data:
+    APP_ENV: dev
+    SERVICE_NAME: product

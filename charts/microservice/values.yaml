@@ -1,0 +1,89 @@
+replicaCount: 2
+
+image:
+  repository: "743320495203.dkr.ecr.us-east-1.amazonaws.com/microservices-1"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ecr-secret
+
+service:
+  type: ClusterIP
+  port: 80
+
+container:
+  port: 8080
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+
+networkPolicy:
+  enabled: false
+
+ingress:
+  enabled: false
+  className: nginx
+  host: "example.local"
+  paths: []
+  annotations: {}
+
+config:
+  enabled: true
+  data: {}
+
+secret:
+  enabled: false
+  data: {}
+
+serviceAccount:
+  create: true
+  name: ""
+
+extraEnv: []
+
+persistence:
+  enabled: false
+  existingClaim: ""
+  accessMode: ReadWriteOnce
+  size: 8Gi
+  storageClassName: ""
+  mountPath: /data
+
+
+redis:
+  enabled: false
+  image:
+    repository: redis
+    tag: "7-alpine"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 6379
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  persistence:
+    enabled: false
+    existingClaim: ""
+    size: 8Gi
+    storageClassName: ""

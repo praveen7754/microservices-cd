@@ -1,0 +1,17 @@
+replicaCount: 1
+image:
+  repository: "743320495203.dkr.ecr.us-east-1.amazonaws.com/microservices-1"
+  tag: "order"
+  pullPolicy: Always
+imagePullSecrets:
+  - name: ecr-secret
+service:
+  type: ClusterIP
+  port: 5003
+container:
+  port: 5003
+config:
+  enabled: true
+  data:
+    APP_ENV: production
+    SERVICE_NAME: order
